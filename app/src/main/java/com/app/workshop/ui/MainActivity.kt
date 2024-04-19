@@ -1,5 +1,6 @@
 package com.app.workshop.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -41,12 +42,23 @@ class MainActivity : AppCompatActivity() {
                         mainViewModel.sendPostsInBatches()
                     }
                 }
-            });
+            })
+
+            postListAdapter.setOnClickListener (object  : PostListAdapter.OnClickListener {
+                override fun onClick(position: Int, model: Post) {
+                    showDetails(model)
+                }
+            })
         } catch (e: Exception) {
             e.stackTrace
         }
     }
 
+    fun showDetails(model : Post){
+        val intent = Intent(this@MainActivity, PostDetailsActivity::class.java)
+        intent.putExtra(NEXT_SCREEN, model)
+        startActivity(intent)
+    }
 
     private fun observePostRequestData() {
         try {
@@ -92,5 +104,8 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.getPostsList()
     }
 
+    companion object{
+        val NEXT_SCREEN="details_screen"
+    }
 
 }
